@@ -18,6 +18,14 @@ import java.util.Map;
 import java.util.HashMap;
 import android.graphics.Paint;
 import android.view.ViewTreeObserver;
+import android.animation.ValueAnimator;
+import android.view.animation.LinearInterpolator;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Shader;
+import android.text.TextPaint;
+import android.animation.ValueAnimator;
+import android.view.animation.LinearInterpolator;
 
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -36,6 +44,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Toast;
 import android.graphics.PorterDuff;
+import android.widget.RelativeLayout;
 import com.script.tone.parameters;
 import java.util.ArrayList;
 import java.util.List;
@@ -223,26 +232,24 @@ public class CustomLayout extends LinearLayout {
 
         // 设置整体背景色和圆角为紫色主题
         GradientDrawable background = new GradientDrawable();
-        background.setColor(Color.parseColor("#ffffb9ee"));
-        background.setCornerRadius(dpToPx(16));
-        setBackground(background);
+background.setColor(Color.parseColor("#99ffb9ee"));  // 80 = 半透明（~50%透明度）
+background.setCornerRadius(dpToPx(16));
+setBackground(background);
 
-        Integer readValue = FileUtil.读取(context, "RankId.txt", Integer.class);
-    if (readValue != null) {
-        // 如果文件中有记录，就更新到指定排名ID变量
-        specifiedRankId = readValue;
-    } else {
-        // 文件不存在或内容不对，使用默认值
-        specifiedRankId = 10; // 或其他
-    }
-        Integer MyRankId1 = FileUtil.读取(context, "MyRankId.txt", Integer.class);
-    if (MyRankId1 != null) {
-        // 如果文件中有记录，就更新到指定排名ID变量
-        myRankId = MyRankId1;
-    } else {
-        // 文件不存在或内容不对，使用默认值
-        myRankId = 10; // 或其他
-    }
+Integer readValue = FileUtil.读取(context, "RankId.txt", Integer.class);
+if (readValue != null) {
+    specifiedRankId = readValue;
+} else {
+    specifiedRankId = 10; // 或其他
+}
+Integer MyRankId1 = FileUtil.读取(context, "MyRankId.txt", Integer.class);
+if (MyRankId1 != null) {
+    myRankId = MyRankId1;
+} else {
+    myRankId = 10; // 或其他
+}
+
+
         
        initializeUpdateUI(context);
        绘制玩家线段(context);
@@ -262,7 +269,7 @@ public class CustomLayout extends LinearLayout {
 
     // 设置更新界面背景
     GradientDrawable background = new GradientDrawable();
-    background.setColor(Color.parseColor("#ffffb9ee")); // 半透明深紫色背景
+    background.setColor(Color.parseColor("#00ffb9ee")); // 半透明深紫色背景
     background.setCornerRadius(dpToPx(16));
     updateLayout.setBackground(background);
 
@@ -272,7 +279,7 @@ public class CustomLayout extends LinearLayout {
     textParams.setMargins(0, dpToPx(20), 0, dpToPx(10));
     updateStatusTextView.setLayoutParams(textParams);
     updateStatusTextView.setText("正在检查更新...");
-    updateStatusTextView.setTextColor(Color.parseColor("#ffcb74ff")); // 设置为金黄色字体
+    updateStatusTextView.setTextColor(Color.parseColor("#ff000000")); // 设置为金黄色字体
     updateStatusTextView.setTextSize(16);
     updateStatusTextView.setGravity(Gravity.CENTER);
 
@@ -281,9 +288,9 @@ public class CustomLayout extends LinearLayout {
     LayoutParams buttonParams = new LayoutParams(dpToPx(280), dpToPx(50));
     buttonParams.setMargins(0, dpToPx(10), 0, 0);
     confirmButton.setLayoutParams(buttonParams);
-    confirmButton.setText("确认");
+    confirmButton.setText("朕知道了");
     confirmButton.setBackground(new GradientDrawable() {{
-        setColor(Color.parseColor("#7A63FF"));
+        setColor(Color.parseColor("#80a88bff"));
         setCornerRadius(dpToPx(10));
     }});
     confirmButton.setTextColor(Color.WHITE);
@@ -354,18 +361,62 @@ public class CustomLayout extends LinearLayout {
     verifyLayout.setLayoutParams(verifyLayoutParams);
 
     // 设置验证界面背景
-    GradientDrawable verifyBackground = new GradientDrawable();
-    verifyBackground.setColor(Color.parseColor("#ffffb9ee")); // 半透明深紫色背景
-    verifyBackground.setCornerRadius(dpToPx(16));
-    verifyLayout.setBackground(verifyBackground);
+   // 设置验证界面背景
+GradientDrawable verifyBackground = new GradientDrawable();
+verifyBackground.setColor(Color.parseColor("#00ffb9ee")); // 半透明深紫色背景
+verifyBackground.setCornerRadius(dpToPx(16));
+verifyLayout.setBackground(verifyBackground);
+
+TextView yzText = new TextView(context);
+yzText.setId(View.generateViewId());
+yzText.setText("蓝莓 验证");
+yzText.setTextSize(18);
+yzText.setGravity(Gravity.CENTER);
+
+// 创建水平渐变效果
+ValueAnimator gradientAnimator = ValueAnimator.ofFloat(0f, 1f);
+gradientAnimator.setDuration(3000); // 3秒完成一轮
+gradientAnimator.setRepeatCount(ValueAnimator.INFINITE); // 无限循环
+gradientAnimator.setInterpolator(new LinearInterpolator()); // 线性插值
+
+gradientAnimator.addUpdateListener(animator -> {
+    float fraction = animator.getAnimatedFraction();
     
-    TextView yzText = new TextView(context);
-        yzText.setId(View.generateViewId());  // 设置 ID 为 YZText
-        yzText.setText("蓝莓 验证");  // 设置文本内容
-        yzText.setTextColor(Color.parseColor("#ffcb74ff"));  // 设置文本颜色
-        yzText.setTextSize(18);
-        yzText.setGravity(Gravity.CENTER);  // 设置文本居中对齐
-        
+    // 创建水平渐变颜色
+    int[] gradientColors = {
+        Color.HSVToColor(new float[]{(fraction * 360f) % 360, 1f, 1f}), // 动态变化的主色
+        Color.HSVToColor(new float[]{(fraction * 360f + 120f) % 360, 1f, 1f}), // 主色+120度的补色
+        Color.HSVToColor(new float[]{(fraction * 360f + 240f) % 360, 1f, 1f})  // 主色+240度的补色
+    };
+    
+    // 创建渐变drawable
+    GradientDrawable textGradient = new GradientDrawable(
+        GradientDrawable.Orientation.LEFT_RIGHT,
+        gradientColors
+    );
+    textGradient.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+    textGradient.setBounds(0, 0, yzText.getWidth(), yzText.getHeight());
+    
+    // 创建着色器
+    TextPaint paint = yzText.getPaint();
+    Shader textShader = new LinearGradient(
+        0, 0, yzText.getWidth(), 0,
+        gradientColors, null, Shader.TileMode.CLAMP
+    );
+    paint.setShader(textShader);
+    
+    yzText.invalidate(); // 重绘TextView
+});
+
+// 添加全局布局监听器，确保在视图布局完成后获取正确的宽度
+yzText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+    @Override
+    public void onGlobalLayout() {
+        yzText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        gradientAnimator.start();
+    }
+});
+        //渐变颜色文本结尾
         // 设置布局参数
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -379,9 +430,9 @@ public class CustomLayout extends LinearLayout {
     cardPasswordInput.setLayoutParams(cardParams);
     cardPasswordInput.setHint("请输入卡密");
     cardPasswordInput.setTextColor(Color.WHITE);
-    cardPasswordInput.setHintTextColor(Color.parseColor("#ffcb74ff"));
+    cardPasswordInput.setHintTextColor(Color.parseColor("#80000000"));
     cardPasswordInput.setBackground(new GradientDrawable() {{
-        setColor(Color.parseColor("#3A355A"));
+        setColor(Color.parseColor("#80000000"));
         setCornerRadius(dpToPx(10));
     }});
     cardPasswordInput.setGravity(Gravity.CENTER);
@@ -401,7 +452,7 @@ public class CustomLayout extends LinearLayout {
     verifyButton.setLayoutParams(buttonParams);
     verifyButton.setText("登录");
     verifyButton.setBackground(new GradientDrawable() {{
-        setColor(Color.parseColor("#7A63FF"));
+        setColor(Color.parseColor("#80a88bff"));
         setCornerRadius(dpToPx(10));
     }});
     
@@ -411,7 +462,7 @@ public class CustomLayout extends LinearLayout {
     购卡按钮.setLayoutParams(buttonParams1);
     购卡按钮.setText("店铺购卡");
     购卡按钮.setBackground(new GradientDrawable() {{
-        setColor(Color.parseColor("#7A63FF"));
+        setColor(Color.parseColor("#80a88bff"));
         setCornerRadius(dpToPx(10));
     }});
     购卡按钮.setTextColor(Color.WHITE);
@@ -485,7 +536,7 @@ public class CustomLayout extends LinearLayout {
 
     // 设置公告界面背景
     GradientDrawable background = new GradientDrawable();
-    background.setColor(Color.parseColor("#ffffb9ee")); // 半透明深紫色背景
+    background.setColor(Color.parseColor("#00ffb9ee")); // 半透明深紫色背景
     background.setCornerRadius(dpToPx(16));
     announcementLayout.setBackground(background);
 
@@ -496,7 +547,7 @@ public class CustomLayout extends LinearLayout {
     
     announcementTextView.setLayoutParams(textParams);
     announcementTextView.setText("正在加载公告内容...");
-    announcementTextView.setTextColor(Color.parseColor("#ffcb74ff"));
+    announcementTextView.setTextColor(Color.parseColor("#ff000000"));
     announcementTextView.setTextSize(16);
     announcementTextView.setGravity(Gravity.CENTER);
 
@@ -507,7 +558,7 @@ public class CustomLayout extends LinearLayout {
     confirmButton.setLayoutParams(buttonParams);
     confirmButton.setText("确认");
     confirmButton.setBackground(new GradientDrawable() {{
-        setColor(Color.parseColor("#7A63FF"));
+        setColor(Color.parseColor("#80a88bff"));
         setCornerRadius(dpToPx(10));
     }});
     confirmButton.setTextColor(Color.WHITE);
@@ -581,16 +632,68 @@ wy.公告(context, new wy.Callback() {
     });
 
     // 创建标题文本视图
-    TextView textView = new TextView(context);
-    LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-            LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    textParams.setMargins(dpToPx(30), dpToPx(15), 0, 0);    
-    textView.setLayoutParams(textParams);
-    textView.setText("Blueberry - Automatic Script");  // 设置标题
-    textView.setTextColor(Color.parseColor("#ffcb74ff"));
-    textView.setTextSize(20);
-    textView.setGravity(Gravity.CENTER_VERTICAL);
+    // 创建标题文本视图
+// 1. 添加必要的import语句（必须放在文件顶部）
 
+
+// ... 其他代码 ...
+
+// 2. 创建TextView（你的原始代码）
+TextView textView = new TextView(context);
+LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+textParams.setMargins(dpToPx(30), dpToPx(15), 0, 0);    
+textView.setLayoutParams(textParams);
+textView.setText("Blueberry - Automatic Script");
+textView.setTextSize(20);
+textView.setGravity(Gravity.CENTER_VERTICAL);
+
+// 3. 确保在视图布局完成后获取宽度（关键修复！）
+textView.post(new Runnable() {
+    @Override
+    public void run() {
+        // 定义颜色数组
+        int[] colors = {
+            Color.RED,        // 红
+            Color.YELLOW,     // 黄
+            Color.GREEN,     // 绿
+            Color.CYAN,      // 青
+            Color.BLUE,       // 蓝
+            Color.MAGENTA    // 紫
+        };
+
+        // 创建渐变着色器（使用实际测量到的宽度）
+        final LinearGradient gradient = new LinearGradient(
+                0, 0, 
+                textView.getWidth(), 0,  // 使用实际宽度
+                colors,
+                null,
+                Shader.TileMode.MIRROR);
+
+        // 初始设置
+        textView.getPaint().setShader(gradient);
+        
+        // 创建动画
+        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+        animator.setDuration(5000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            private final Matrix matrix = new Matrix();
+            
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                matrix.setTranslate(value * textView.getWidth() * 2, 0);
+                gradient.setLocalMatrix(matrix);
+                textView.invalidate();
+            }
+        });
+        
+        animator.start();
+    }
+});
     // 将 ImageView 和 TextView 添加到 topLayout
     topLayout.addView(imageView);
     topLayout.addView(textView);
@@ -750,7 +853,7 @@ private void startUpdateChecker(Context context, View topLayout, View mainConten
         textView.setLayoutParams(params);
         textView.setText(text);
         textView.setTextSize(14);
-        textView.setTextColor(Color.parseColor("#ffcb74ff"));
+        textView.setTextColor(Color.parseColor("#ff000000"));
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(0, dpToPx(6), 0, 0);
         textView.setClickable(true);
@@ -933,7 +1036,7 @@ private void startUpdateChecker(Context context, View topLayout, View mainConten
             Switch switchButton = new Switch(context);
             switchButton.setText(switchName);
             switchButton.setTag(switchName); // 设置Tag
-            switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+            switchButton.setTextColor(Color.parseColor("#ff000000"));
             applySwitchStyle(switchButton);
 
             // 开关状态监听
@@ -2003,7 +2106,7 @@ if (卡点 == null) {
         卡点 = buttonCreator.createRoundButton(
                 "绘制\n卡点",
                 150,
-                Color.parseColor("#FFFF33"),
+                Color.parseColor("#50FFFF33"),
                 100, 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
                     @Override
@@ -2079,7 +2182,7 @@ if (卡点 == null) {
         旋转卡点 = buttonCreator.createRoundButton(
                 "旋转\n卡点",
                 150,
-                Color.parseColor("#FFA07A"),
+                Color.parseColor("#50FFA07A"),
                 100, 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
                     @Override
@@ -2155,7 +2258,7 @@ if (卡点 == null) {
         蛇手卡点 = buttonCreator.createRoundButton(
                 "蛇手\n卡点",
                 150,
-                Color.parseColor("#FF4500"),
+                Color.parseColor("#50FF4500"),
                 100, 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
                     @Override
@@ -2232,7 +2335,7 @@ if (卡点 == null) {
         追踪大炮 = buttonCreator.createRoundButton(
                 "追踪\n大炮",
                 150,
-                Color.parseColor("#0033FF"),
+                Color.parseColor("#500033FF"),
                 100, 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
                     @Override
@@ -2283,7 +2386,7 @@ if (卡点 == null) {
     同步大炮 = buttonCreator.createRoundButton(
         "同步\n大炮",
         150,
-        Color.parseColor("#33CCFF"), // 颜色可以根据需求调整
+        Color.parseColor("#5033CCFF"), // 颜色可以根据需求调整
         200,
         200,
         new RoundButtonCreator.OnButtonTouchListener() {
@@ -2326,7 +2429,7 @@ if (同步蛇手 == null) {
     同步蛇手 = buttonCreator.createRoundButton(
         "同步\n蛇手",
         150,
-        Color.parseColor("#FF3300"), // 颜色可以根据需求调整
+        Color.parseColor("#50FF3300"), // 颜色可以根据需求调整
         200,
         200,
         new RoundButtonCreator.OnButtonTouchListener() {
@@ -2476,7 +2579,7 @@ if (追踪三角 == null) {
     追踪三角 = buttonCreator.createRoundButton(
         "追踪\n三角",
         150,
-              Color.parseColor("#FF6699"),
+              Color.parseColor("#50FF6699"),
                 200,
                 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
@@ -2520,7 +2623,7 @@ if (追踪三角 == null) {
     同步三角 = buttonCreator.createRoundButton(
         "同步\n三角",
         150,
-              Color.parseColor("#66FF99"),
+              Color.parseColor("#5066FF99"),
                 200,
                 200,
                 new RoundButtonCreator.OnButtonTouchListener() {
@@ -3333,7 +3436,7 @@ private void triggerSyncSnake(Context context) {
             Switch switchButton = new Switch(context);
             switchButton.setText(switchName);
             switchButton.setTag(switchName); // 设置Tag
-            switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+            switchButton.setTextColor(Color.parseColor("#ff000000"));
             applySwitchStyle(switchButton);
 
             // 开关状态监听
@@ -3361,7 +3464,7 @@ case "滑块显隐":
                                             吐球 = buttonCreator.createRoundButton(
                                                 "吐球",
                                                 dpToPx(52),
-                                                0x507A63FF,
+                                                0x50ff8bff,
                                                 200,
                                                 200,
                                                 new RoundButtonCreator.OnButtonTouchListener() {
@@ -3529,7 +3632,7 @@ case "滑块显隐":
                                         冲球 = buttonCreator.createRoundButton(
                                                         "冲球",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0x5000ffff,
                                                         600,
                                                         200,
                                                         new RoundButtonCreator.OnButtonTouchListener() {
@@ -3587,7 +3690,7 @@ case "滑块显隐":
                                         四分 = buttonCreator.createRoundButton(
                                                         "四分",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0x50a874ff,
                                                         800,
                                                         200,
                                                        new RoundButtonCreator.OnButtonTouchListener() {
@@ -3690,7 +3793,7 @@ case "滑块显隐":
                                         三角 = buttonCreator.createRoundButton(
                                             "三角",
                                             dpToPx(52),
-                                            0x507A63FF,
+                                            0x5000ff00,
                                             1000,
                                             200,
                                             new RoundButtonCreator.OnButtonTouchListener() {
@@ -3837,7 +3940,7 @@ case "滑块显隐":
                                         蛇手 = buttonCreator.createRoundButton(
                                             "蛇手",
                                             dpToPx(52),
-                                            0x507A63FF,
+                                            0x50ffa817,
                                             200,
                                             400,
                                             new RoundButtonCreator.OnButtonTouchListener() {
@@ -3980,7 +4083,7 @@ case "滑块显隐":
                                         侧合 = buttonCreator.createRoundButton(
                                                         "侧合",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0x50ff3417,
                                                         400,
                                                         400,
                                                         new RoundButtonCreator.OnButtonTouchListener() {
@@ -4089,7 +4192,7 @@ case "滑块显隐":
                                         后仰 = buttonCreator.createRoundButton(
                                                         "后仰",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0x50dcdc00,
                                                         600,
                                                         400,
                                                         new RoundButtonCreator.OnButtonTouchListener() {
@@ -4203,7 +4306,7 @@ case "滑块显隐":
                                         旋转 = buttonCreator.createRoundButton(
                                                         "旋转",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0x50ff8ba8,
                                                         800,
                                                         400,
                                                         new RoundButtonCreator.OnButtonTouchListener() {                                                            
@@ -4333,7 +4436,7 @@ case "滑块显隐":
                                         内存卡点 = buttonCreator.createRoundButton(
                                                         "内存\n卡点",
                                                         dpToPx(52),
-                                                        0x507A63FF,
+                                                        0xff8be2ff,
                                                         1000,
                                                         400,
                                                         new RoundButtonCreator.OnButtonTouchListener() {
@@ -4633,7 +4736,7 @@ case "滑块显隐":
             ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(8)); // 8dp间隔
 
     GradientDrawable scrollBackground = new GradientDrawable();
-    scrollBackground.setColor(Color.parseColor("#ffffb9ee"));
+    scrollBackground.setColor(Color.parseColor("#00ffb9ee"));
     scrollBackground.setCornerRadius(16); // 圆角背景
     scrollView.setBackground(scrollBackground);
 
@@ -4930,7 +5033,7 @@ private LinearLayout createPage4Layout(Context context) {
             ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(8)); // 8dp间隔
 
     GradientDrawable scrollBackground = new GradientDrawable();
-    scrollBackground.setColor(Color.parseColor("#ffffb9ee"));
+    scrollBackground.setColor(Color.parseColor("#00ffb9ee"));
     scrollBackground.setCornerRadius(16); // 圆角背景
     scrollView.setBackground(scrollBackground);
 
@@ -5019,7 +5122,7 @@ mainLayout.addView(new View(context), spacingParams);
         Switch switchButton = new Switch(context);
         switchButton.setText(switchName);
         switchButton.setTag(switchName); // 设置Tag
-        switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+        switchButton.setTextColor(Color.parseColor("#ff000000"));
         applySwitchStyle(switchButton);       
                                         
                 
@@ -5115,7 +5218,7 @@ mainLayout.addView(createCollapsibleSection(context, "关键词美化", () -> {
         Switch switchButton = new Switch(context);
         switchButton.setText(switchName);
         switchButton.setTag(switchName); // 设置Tag
-        switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+        switchButton.setTextColor(Color.parseColor("#ff000000"));
         applySwitchStyle(switchButton);    
         
            // 开关状态监听
@@ -5251,7 +5354,7 @@ mainLayout.addView(createCollapsibleSection(context, "昵称美化", () -> {
         Switch switchButton = new Switch(context);
         switchButton.setText(switchName);
         switchButton.setTag(switchName); // 设置Tag
-        switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+        switchButton.setTextColor(Color.parseColor("#ff000000"));
         applySwitchStyle(switchButton);    
         
            // 开关状态监听
@@ -5308,7 +5411,7 @@ mainLayout.addView(createCollapsibleSection(context, "音效包美化", () -> {
         Switch switchButton = new Switch(context);
         switchButton.setText(switchName);
         switchButton.setTag(switchName); // 设置Tag
-        switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+        switchButton.setTextColor(Color.parseColor("#ff000000"));
         applySwitchStyle(switchButton);    
         
            // 开关状态监听
@@ -5354,7 +5457,7 @@ mainLayout.addView(createCollapsibleSection(context, "去皮/去除红蓝雾", (
         Switch switchButton = new Switch(context);
         switchButton.setText(switchName);
         switchButton.setTag(switchName); // 设置Tag
-        switchButton.setTextColor(Color.parseColor("#ffcb74ff"));
+        switchButton.setTextColor(Color.parseColor("#ff000000"));
         applySwitchStyle(switchButton);    
         
            // 开关状态监听
@@ -5435,9 +5538,9 @@ return page4Layout;
 
     // ------------------ 标题文字 ------------------
     TextView textView = new TextView(context);
-    textView.setText("同步使用前于此处按照要求填写排名");
+    textView.setText("同步使用前此处按照要求填写排名");
     textView.setTextSize(16);
-    textView.setTextColor(Color.parseColor("#FFFFFF")); // 紫色
+    textView.setTextColor(Color.parseColor("#ff000000")); // 紫色
     page5Layout.addView(textView);
 
     // ------------------ 横向容器: 左侧 EditText，右侧按钮 (指定排名ID) ------------------
@@ -5523,7 +5626,7 @@ return page4Layout;
     TextView logTextView = new TextView(context);
     logTextView.setTextSize(14);
     logTextView.setTextColor(Color.parseColor("#000000"));
-    logTextView.setBackgroundColor(Color.parseColor("#ffffb9ee"));
+    logTextView.setBackgroundColor(Color.parseColor("#99ffb9ee"));
     logTextView.setPadding(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8));
     logTextView.setLayoutParams(new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -5617,13 +5720,13 @@ private LinearLayout createCollapsibleSection(Context context, String title, Col
     TextView titleView = new TextView(context);
     titleView.setText(title);
     titleView.setTextSize(12); // 使用相同的小字体大小
-    titleView.setTextColor(Color.parseColor("#ffcb74ff")); // 字体颜色
+    titleView.setTextColor(Color.parseColor("#ff000000")); // 字体颜色
     titleView.setGravity(Gravity.CENTER_VERTICAL);
     titleView.setPadding(16, 16, 16, 16);
 
     // 设置圆角背景
     GradientDrawable background = new GradientDrawable();
-    background.setColor(Color.parseColor("#ffffb9ee")); // 背景色契合主窗体
+    background.setColor(Color.parseColor("#99ffb9ee")); // 背景色契合主窗体
     background.setCornerRadius(16); // 圆角背景
     titleView.setBackground(background);
 
@@ -5703,7 +5806,7 @@ private LinearLayout createPage6Layout(Context context) {
     editText.setHint(hintText);
     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
     editText.setTextSize(16);
-    editText.setTextColor(Color.parseColor("#ffcb74ff"));       // 字体颜色
+    editText.setTextColor(Color.parseColor("#ff000000"));       // 字体颜色
     editText.setHintTextColor(Color.parseColor("#50B9A6FF")); // Hint 半透明紫
     editText.setHighlightColor(Color.parseColor("#50B9A6FF")); // 选中文字高亮颜色
 
@@ -5731,7 +5834,7 @@ private LinearLayout createPage6Layout(Context context) {
 
     editText.setOnFocusChangeListener((v, hasFocus) -> {
         if (hasFocus) {
-            underlineView.setBackgroundColor(Color.parseColor("#ffcb74ff"));
+            underlineView.setBackgroundColor(Color.parseColor("#ff000000"));
         } else {
             underlineView.setBackgroundColor(Color.parseColor("#50B9A6FF"));
         }
@@ -5746,12 +5849,12 @@ private LinearLayout createPage6Layout(Context context) {
     Button saveButton = new Button(context);
     saveButton.setText(buttonText);
     saveButton.setTextSize(16);
-    saveButton.setTextColor(Color.parseColor("#ffcb74ff"));
+    saveButton.setTextColor(Color.parseColor("#ff000000"));
 
     GradientDrawable buttonBg = new GradientDrawable();
     buttonBg.setCornerRadius(dpToPx(8));
-    buttonBg.setColor(Color.parseColor("#ffffb9ee"));
-    buttonBg.setStroke(dpToPx(1), Color.parseColor("#ffcb74ff"));
+    buttonBg.setColor(Color.parseColor("#99ffb9ee"));
+    buttonBg.setStroke(dpToPx(1), Color.parseColor("#ff000000"));
     saveButton.setBackground(buttonBg);
 
     LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
@@ -5876,7 +5979,7 @@ private LinearLayout createPage6Layout(Context context) {
     TextView labelView = new TextView(context);
     labelView.setText(label);
     labelView.setTextSize(10); // 小字体
-    labelView.setTextColor(Color.parseColor("#ffcb74ff"));
+    labelView.setTextColor(Color.parseColor("#ff000000"));
     labelView.setGravity(Gravity.CENTER_VERTICAL);
     labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
     layout.addView(labelView);
@@ -5888,7 +5991,7 @@ private LinearLayout createPage6Layout(Context context) {
     seekBar.setLayoutParams(seekBarParams);
     seekBar.setMax(max - min);
     seekBar.setProgress(initialValue - min);
-    seekBar.getThumb().setColorFilter(Color.parseColor("#ffff7485"), android.graphics.PorterDuff.Mode.SRC_IN);
+    seekBar.getThumb().setColorFilter(Color.parseColor("#99ffb9ee"), android.graphics.PorterDuff.Mode.SRC_IN);
     seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#A390E4"), android.graphics.PorterDuff.Mode.SRC_IN);
     layout.addView(seekBar);
 
@@ -5896,12 +5999,12 @@ private LinearLayout createPage6Layout(Context context) {
     EditText valueEditText = new EditText(context);
     valueEditText.setText(String.valueOf(initialValue));
     valueEditText.setTextSize(10);
-    valueEditText.setTextColor(Color.parseColor("#ffcb74ff"));
+    valueEditText.setTextColor(Color.parseColor("#ff000000"));
     valueEditText.setGravity(Gravity.CENTER);
     
     // 设置输入框圆角背景
     GradientDrawable editTextBackground = new GradientDrawable();
-    editTextBackground.setColor(Color.parseColor("#ffe9e955")); // 背景颜色
+    editTextBackground.setColor(Color.parseColor("#80e9e955")); // 背景颜色
     editTextBackground.setCornerRadius(16); // 圆角半径
     valueEditText.setBackground(editTextBackground);
 
@@ -5968,7 +6071,7 @@ private LinearLayout createPage6Layout(Context context) {
     TextView labelView = new TextView(context);
     labelView.setText(label);
     labelView.setTextSize(10);
-    labelView.setTextColor(Color.parseColor("#ffcb74ff"));
+    labelView.setTextColor(Color.parseColor("#ff000000"));
     labelView.setGravity(Gravity.CENTER_VERTICAL);
     labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
     layout.addView(labelView);
@@ -5979,18 +6082,18 @@ private LinearLayout createPage6Layout(Context context) {
     seekBar.setLayoutParams(seekBarParams);
     seekBar.setMax((int) (max.subtract(min).multiply(BigDecimal.valueOf(1000)).intValue()));
     seekBar.setProgress((int) (initialValue.subtract(min).multiply(BigDecimal.valueOf(1000)).intValue()));
-    seekBar.getThumb().setColorFilter(Color.parseColor("#ffff7485"), android.graphics.PorterDuff.Mode.SRC_IN);
+    seekBar.getThumb().setColorFilter(Color.parseColor("#99ffb9ee"), android.graphics.PorterDuff.Mode.SRC_IN);
     seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#A390E4"), android.graphics.PorterDuff.Mode.SRC_IN);
     layout.addView(seekBar);
 
     EditText valueEditText = new EditText(context);
     valueEditText.setText(initialValue.toString());  // 直接使用初始值，不进行四舍五入
     valueEditText.setTextSize(10);
-    valueEditText.setTextColor(Color.parseColor("#ffcb74ff"));
+    valueEditText.setTextColor(Color.parseColor("#ff000000"));
     valueEditText.setGravity(Gravity.CENTER);
 
     GradientDrawable editTextBackground = new GradientDrawable();
-    editTextBackground.setColor(Color.parseColor("#ffe9e955"));
+    editTextBackground.setColor(Color.parseColor("#80e9e955"));
     editTextBackground.setCornerRadius(16);
     valueEditText.setBackground(editTextBackground);
 
@@ -6054,50 +6157,52 @@ private LinearLayout createPage6Layout(Context context) {
     // 标签TextView
     TextView labelView = new TextView(context);
     labelView.setText(label);
-    labelView.setTextSize(18); // 小字体
+    labelView.setTextSize(18);
     labelView.setTextColor(Color.parseColor("#B9A6FF"));
     labelView.setGravity(Gravity.CENTER_VERTICAL);
     labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
     layout.addView(labelView);
 
+    // 创建包含SeekBar和数值的RelativeLayout
+    RelativeLayout seekContainer = new RelativeLayout(context);
+    seekContainer.setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2.8f)); // 合并两个权重
+
     // 设置 SeekBar
     SeekBar seekBar = new SeekBar(context);
-    LinearLayout.LayoutParams seekBarParams = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2f);
-    seekBarParams.setMargins(0, 0, 0, 0); // 移除之前的边距调整
+    RelativeLayout.LayoutParams seekBarParams = new RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+    );
     seekBar.setLayoutParams(seekBarParams);
     seekBar.setMax((int) (max.subtract(min).multiply(BigDecimal.valueOf(precisionScale)).doubleValue()));
     seekBar.setProgress((int) (initialValue.subtract(min).multiply(BigDecimal.valueOf(precisionScale)).doubleValue()));
-    seekBar.getThumb().setColorFilter(Color.parseColor("#6F5A9A"), android.graphics.PorterDuff.Mode.SRC_IN);
-    seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#A390E4"), android.graphics.PorterDuff.Mode.SRC_IN);
-    layout.addView(seekBar);
+    seekBar.getThumb().setColorFilter(Color.parseColor("#80000000"), android.graphics.PorterDuff.Mode.SRC_IN);
+    // Changed to transparent pink (50% transparency - #80FFA2F3)
+    seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#40FFA2F3"), android.graphics.PorterDuff.Mode.SRC_IN);
+    seekContainer.addView(seekBar);
 
-    // 数值显示 TextView
+    // 数值显示 TextView（居中在SeekBar上）
     TextView valueTextView = new TextView(context);
     valueTextView.setText(String.format("%.3f", initialValue));
     valueTextView.setTextSize(18);
     valueTextView.setTextColor(Color.parseColor("#B9A6FF"));
-    valueTextView.setGravity(Gravity.CENTER_VERTICAL); // 改为垂直居中
-
-    // 设置文本背景（圆角效果，可选）
-    GradientDrawable textBackground = new GradientDrawable();
-    textBackground.setColor(Color.parseColor("#3A355A")); // 背景颜色
-    textBackground.setCornerRadius(16); // 圆角半径
-    valueTextView.setBackground(textBackground);
-
-    // 调整布局参数使与SeekBar对齐
-    LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.8f);
-    textParams.gravity = Gravity.CENTER_VERTICAL; // 添加垂直居中对齐
-    textParams.setMargins(16, 0, 0, 0); // 添加左边距与SeekBar分隔
+    
+    RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+    );
+    textParams.addRule(RelativeLayout.CENTER_IN_PARENT);
     valueTextView.setLayoutParams(textParams);
-    layout.addView(valueTextView);
+    seekContainer.addView(valueTextView);
 
-    // 联动逻辑：SeekBar -> TextView更新显示当前值
+    layout.addView(seekContainer);
+
+    // 联动逻辑保持不变
     seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            // 计算当前值，注意进度值除以缩放因子
             double value = min.add(BigDecimal.valueOf(progress / (double) precisionScale)).doubleValue();
-            valueTextView.setText(String.format("%.3f", value)); // 更新显示文本
+            valueTextView.setText(String.format("%.3f", value));
             listener.accept(value);
         }
 
@@ -6129,17 +6234,17 @@ private LinearLayout createPage6Layout(Context context) {
         resetMenuBackground(advancedSettings);
 
         if (pageIndex == 0) {
-            setRoundedBackground(gameSettings, "#ff5dd6ff");
+            setRoundedBackground(gameSettings, "#805dd6ff");
         } else if (pageIndex == 1) {
-            setRoundedBackground(skinSettings, "#ff5dd6ff");
+            setRoundedBackground(skinSettings, "#805dd6ff");
         } else if (pageIndex == 2) {
-            setRoundedBackground(operationSettings, "#ff5dd6ff");
+            setRoundedBackground(operationSettings, "#805dd6ff");
         } else if (pageIndex == 3) {
-            setRoundedBackground(beautifySettings, "#ff5dd6ff");
+            setRoundedBackground(beautifySettings, "#805dd6ff");
         } else if (pageIndex == 4) {
-            setRoundedBackground(rankingSettings, "#ff5dd6ff");
+            setRoundedBackground(rankingSettings, "#805dd6ff");
         } else if (pageIndex == 5) {
-            setRoundedBackground(advancedSettings, "#ff5dd6ff");
+            setRoundedBackground(advancedSettings, "#805dd6ff");
         }
     }
     private void resetMenuBackground(TextView textView) {
@@ -6164,7 +6269,7 @@ private LinearLayout createPage6Layout(Context context) {
     }
 
     private void applySwitchStyle(Switch switchButton) {
-        switchButton.getThumbDrawable().setColorFilter(Color.parseColor("#ffff7485"), PorterDuff.Mode.SRC_IN); // 紫色滑块
+        switchButton.getThumbDrawable().setColorFilter(Color.parseColor("#80ff7485"), PorterDuff.Mode.SRC_IN); // 紫色滑块
         switchButton.getTrackDrawable().setColorFilter(Color.parseColor("#A390E4"), PorterDuff.Mode.SRC_IN); // 浅紫色轨道
     }
     private void showToast(Context context, String message) {
@@ -6205,7 +6310,7 @@ private LinearLayout createPage6Layout(Context context) {
     TextView textView = new TextView(context);
     textView.setText(textContent);
     textView.setTextSize(12); // 设置字体大小
-    textView.setTextColor(Color.parseColor("#ffcb74ff")); // 设置文本颜色
+    textView.setTextColor(Color.parseColor("#ff000000")); // 设置文本颜色
     textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL); // 左对齐并垂直居中
     textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG); // 添加下划线
 
