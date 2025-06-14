@@ -39,18 +39,6 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.os.SystemClock;
-import android.util.Log;
 
 // 第三方库
 import com.google.android.material.slider.Slider;
@@ -77,7 +65,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.lang.reflect.Field; // 添加这一行
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -192,12 +179,12 @@ public class UIView extends FrameLayout {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
-        int viewWidth = dpToPx(524, context);
-        int viewHeight = dpToPx(278, context);
+        int viewWidth = dpToPx(624, context);
+        int viewHeight = dpToPx(328, context);
 
         // 设置窗口背景为白色，并设置窗口四个角圆角（例如4dp）
         GradientDrawable windowBackground = new GradientDrawable();
-        windowBackground.setColors(new int[]{Color.parseColor("#fff2f9d4"), Color.parseColor("#fff2f9d4")});
+        windowBackground.setColors(new int[]{Color.parseColor("#FFE6EE"), Color.parseColor("#E8D3FF")});
         windowBackground.setCornerRadius(dpToPx(4, context));
         setBackground(windowBackground);
 
@@ -225,7 +212,7 @@ public class UIView extends FrameLayout {
         // 创建 15° 斜向渐变背景（左下→右上）
         GradientDrawable gradientDrawable = new GradientDrawable(
         GradientDrawable.Orientation.BL_TR,  // 15° 渐变，左下到右上
-        new int[]{Color.parseColor("#FFFAFFE1"), Color.parseColor("#FFFAFFE1")}); // 浅粉→淡紫
+        new int[]{Color.parseColor("#FFB6C1"), Color.parseColor("#E0C8FF")}); // 浅粉→淡紫
         float radius = dpToPx(4, context); // 将4dp转换为像素
         gradientDrawable.setCornerRadii(new float[]{
             radius, radius,   // 左上角：x 和 y 半径
@@ -237,9 +224,9 @@ public class UIView extends FrameLayout {
         
         // 标题文本
         TextView titleText = new TextView(context);
-        titleText.setText("蓝莓 - 游戏设置");
+        titleText.setText("Holy_Tone - Auto Script");
         titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        titleText.setTextColor(Color.parseColor("#FF80956C"));  // 设置白色文字
+        titleText.setTextColor(Color.parseColor("#FF1493"));  // 设置白色文字
         LinearLayout.LayoutParams titleTextParams = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
         titleTextParams.setMargins(dpToPx(5, context), 0, 0, 0);
         titleText.setLayoutParams(titleTextParams);
@@ -249,7 +236,7 @@ public class UIView extends FrameLayout {
         final TextView closeText = new TextView(context);
         closeText.setText("X");
         closeText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        closeText.setTextColor(Color.parseColor("#FF80956C")); // 天鹅绒红关闭按钮
+        closeText.setTextColor(Color.parseColor("#CC016B")); // 天鹅绒红关闭按钮
         closeText.setPadding(dpToPx(10, context), dpToPx(5, context), dpToPx(10, context), dpToPx(5, context));
         closeText.setClickable(true);
         closeText.setOnClickListener(new OnClickListener() {
@@ -292,9 +279,9 @@ public class UIView extends FrameLayout {
         contentArea.addView(navWrapper);
 
         // 导航按钮
-        final String[] navItems = {"基础", "脚本", "排名", "关于" };
+        final String[] navItems = {"基础", "脚本", "排名", "美化", "关于"};
         final TextView[] navButtons = new TextView[navItems.length];
-        final int selectedColor = Color.parseColor("#80FFFFFF");
+        final int selectedColor = Color.parseColor("#FF7FAA");
         final int defaultColor = Color.TRANSPARENT;
 
         // 分割线
@@ -302,7 +289,7 @@ public class UIView extends FrameLayout {
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(dpToPx(2, context), LayoutParams.MATCH_PARENT);
         dividerParams.setMargins(dpToPx(2, context), dpToPx(2, context), dpToPx(2, context), dpToPx(2, context));
         divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.parseColor("#FF80956C")); // 丁香紫分割线
+        divider.setBackgroundColor(Color.parseColor("#DDA0DD")); // 丁香紫分割线
         contentArea.addView(divider);
 
         // 右侧分页区域
@@ -329,7 +316,7 @@ public class UIView extends FrameLayout {
             navItem.setId(1000 + i);
             navItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             navItem.setGravity(Gravity.CENTER);
-            navItem.setTextColor(Color.parseColor("#FF80956C")); // 正文文字改为紫藤灰
+            navItem.setTextColor(Color.parseColor("#5A4F6A")); // 正文文字改为紫藤灰
             navItem.setPadding(dpToPx(10, context), dpToPx(10, context), dpToPx(10, context), dpToPx(10, context));
             LinearLayout.LayoutParams navItemParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             navItemParams.setMargins(0, dpToPx(5, context), 0, dpToPx(5, context));
@@ -367,11 +354,11 @@ public class UIView extends FrameLayout {
                             newPage = createPaging3Layout(context);
                             break;
                         case 3:
+                            newPage = createPaging4Layout(context);
+                            break;
+                        case 4:
                             newPage = createPaging5Layout(context);
                             break;
-                       /* case 4:
-                            newPage = createPaging5Layout(context);
-                            break;*/
                         default:
                             newPage = new View(context);
                             break;
@@ -431,7 +418,7 @@ public class UIView extends FrameLayout {
         TextView OptionText1 = new TextView(context);
         OptionText1.setText("过检方式:");
         OptionText1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText1.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText1.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         NestedLayout1.addView(OptionText1);
 
         createCheckBox(context, "占位", ID_CHECKBOX1_MODE, false, new OnClickListener() {
@@ -439,10 +426,10 @@ public class UIView extends FrameLayout {
             public void onClick(View v) {
             
                 if (((CheckBox) v).isChecked()) {
-                   // 吐球.setVisibility(View.VISIBLE);
+                    //吐球.setVisibility(View.VISIBLE);
                     同步.setVisibility(View.VISIBLE);
                 } else {
-                   // 吐球.setVisibility(View.GONE);
+                    //吐球.setVisibility(View.GONE);
                     同步.setVisibility(View.GONE);
                 }
             }
@@ -460,17 +447,18 @@ public class UIView extends FrameLayout {
             
                             long baseAddr = memory.getModuleAddress("libNetHTProtect.so");
                             
-                            memory.setValue("1", baseAddr + 0x364010, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364014, memory.TYPE_DWORD);            
-                            memory.setValue("1", baseAddr + 0x364018, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x36401C, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364020, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364024, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364028, memory.TYPE_DWORD);            
-                            memory.setValue("1", baseAddr + 0x36402C, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364030, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x364034, memory.TYPE_DWORD);
-                            memory.setValue("1", baseAddr + 0x36400C, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C91E8, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C91EC, memory.TYPE_DWORD);            
+                            memory.setValue("16384", baseAddr + 0x2C91F0, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C91F4, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C91F8, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C91FC, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C9204, memory.TYPE_DWORD);            
+                            memory.setValue("16384", baseAddr + 0x2C9208, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C920C, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C9210, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C9214, memory.TYPE_DWORD);
+                            memory.setValue("16384", baseAddr + 0x2C9218, memory.TYPE_DWORD);
                             
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -497,7 +485,7 @@ public class UIView extends FrameLayout {
         TextView OptionText2 = new TextView(context);
         OptionText2.setText("键位设置:");
         OptionText2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText2.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText2.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         NestedLayout2.addView(OptionText2);
 
         createCheckBox(context, "调试键位(坐标)", ID_CHECKBOX3_MODE, false, new OnClickListener() {
@@ -548,7 +536,7 @@ public class UIView extends FrameLayout {
         TextView OptionText3 = new TextView(context);
         OptionText3.setText("数据设置:");
         OptionText3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText3.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText3.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         NestedLayout3.addView(OptionText3);
 
         createCheckBox(context, "初始绘制(技战室)", ID_CHECKBOX5_MODE, false, new OnClickListener() {
@@ -628,18 +616,10 @@ public class UIView extends FrameLayout {
         NestedLayout4.setBackgroundColor(Color.parseColor("#00000000"));
         NestedLayout4.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         
-        View divider = new View(context);
-        LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, dpToPx(1, context));
-        dividerParams.setMargins(0, dpToPx(16, context), 0, dpToPx(16, context));
-        divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.parseColor("#FF80956C"));  // 使用和标题栏相同的粉色
-        childLayout.addView(divider);
-        
         TextView OptionText4 = new TextView(context);
         OptionText4.setText("视野范围:");
         OptionText4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText4.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText4.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         LinearLayout.LayoutParams optionText4Params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         optionText4Params.setMargins(0, 0, dpToPx(30, context), 0);
@@ -664,8 +644,6 @@ public class UIView extends FrameLayout {
 
         childLayout.addView(NestedLayout4);
         
-        
-        
         LinearLayout NestedLayout5 = new LinearLayout(context);
         NestedLayout5.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams nestedLayout5Params = new LinearLayout.LayoutParams(
@@ -678,7 +656,7 @@ public class UIView extends FrameLayout {
         TextView OptionText5 = new TextView(context);
         OptionText5.setText("合球动画:");
         OptionText5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText5.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText5.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         LinearLayout.LayoutParams optionText5Params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         optionText5Params.setMargins(0, 0, dpToPx(30, context), 0);
@@ -713,9 +691,9 @@ public class UIView extends FrameLayout {
         NestedLayout6.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
         TextView OptionText6 = new TextView(context);
-        OptionText6.setText("吐球连点:");
+        OptionText6.setText("双连点(局内):");
         OptionText6.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText6.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText6.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         LinearLayout.LayoutParams optionText6Params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         optionText6Params.setMargins(0, 0, dpToPx(30, context), 0);
@@ -752,7 +730,7 @@ public class UIView extends FrameLayout {
         TextView OptionText7 = new TextView(context);
         OptionText7.setText("全局速度:");
         OptionText7.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText7.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText7.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         LinearLayout.LayoutParams optionText7Params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         optionText6Params.setMargins(0, 0, dpToPx(30, context), 0);
@@ -787,7 +765,7 @@ public class UIView extends FrameLayout {
         TextView OptionText8 = new TextView(context);
         OptionText8.setText("名字大小:");
         OptionText8.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        OptionText8.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        OptionText8.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         LinearLayout.LayoutParams optionText8Params = new LinearLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         optionText8Params.setMargins(0, 0, dpToPx(30, context), 0);
@@ -817,995 +795,651 @@ public class UIView extends FrameLayout {
 
     // =============== 脚本分页 ===============
     private View createPaging2Layout(Context context) {
-    // 外层容器：垂直LinearLayout
-    LinearLayout container = new LinearLayout(context);
-    container.setOrientation(LinearLayout.VERTICAL);
-    container.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-    // 1. 顶部横向导航栏（保留原有结构）
-    HorizontalScrollView horizontalScrollView = new HorizontalScrollView(context);
-    LinearLayout.LayoutParams horizontalScrollViewParams = new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, dpToPx(42, context));
-    horizontalScrollViewParams.setMargins(dpToPx(3, context), 0, dpToPx(3, context), 0);
-    horizontalScrollView.setLayoutParams(horizontalScrollViewParams);
-    horizontalScrollView.setVerticalScrollBarEnabled(false);
-    horizontalScrollView.setHorizontalScrollBarEnabled(false);
-
-    final LinearLayout horizontalNavLayout = new LinearLayout(context);
-    horizontalNavLayout.setOrientation(LinearLayout.HORIZONTAL);
-    horizontalNavLayout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
-    horizontalNavLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-    horizontalNavLayout.setPadding(dpToPx(5, context), 0, dpToPx(5, context), 0);
-
-    // 2. 下方动态内容容器（关键修改点）
-    final ScrollView verticalScrollView = new ScrollView(context);
-    final LinearLayout verticalContentLayout = new LinearLayout(context);
-    verticalContentLayout.setId(ID_PAGING2_ROOT);
-    verticalContentLayout.setOrientation(LinearLayout.VERTICAL);
-    verticalContentLayout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    verticalScrollView.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, 0, 1));
-    verticalScrollView.addView(verticalContentLayout);
-    verticalScrollView.setVerticalScrollBarEnabled(false);
-    verticalScrollView.setHorizontalScrollBarEnabled(false);
-
-    // 3. 导航按钮初始化（添加动态切换逻辑）
-    final String[] scriptNavItems = {"连点", "三角", "侧合", "后仰", "蛇手", "旋转", "绘制", "卡点", "同步", "占位"};
-    for (int i = 0; i < scriptNavItems.length; i++) {
-        final int index = i;
-        TextView navItem = new TextView(context);
-        navItem.setText(scriptNavItems[i]);
-        navItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        navItem.setPadding(dpToPx(10, context), dpToPx(10, context), dpToPx(10, context), dpToPx(10, context));
-        navItem.setGravity(Gravity.CENTER_VERTICAL);
-        navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#fff2f9d4")));
-        navItem.setTextColor(Color.parseColor("#FF80956C"));
-
-        LinearLayout.LayoutParams navItemParams = new LinearLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT, dpToPx(40, context));
-        navItemParams.setMargins(dpToPx(2, context), 0, dpToPx(2, context), 0);
-        navItem.setLayoutParams(navItemParams);
-
-        navItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // —— 1. 保存当前脚本页状态 ——
-                if (verticalContentLayout.getChildCount() > 0) {
-                    SparseArray<Parcelable> state = new SparseArray<>();
-                    verticalContentLayout.saveHierarchyState(state);
-                    scriptPageStates.put(currentScriptPage, state);
+        // 外层容器：垂直LinearLayout
+        LinearLayout container = new LinearLayout(context);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    
+        // 1. 顶部横向导航栏（保留原有结构）
+        HorizontalScrollView horizontalScrollView = new HorizontalScrollView(context);
+        LinearLayout.LayoutParams horizontalScrollViewParams = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, dpToPx(42, context));
+        horizontalScrollViewParams.setMargins(dpToPx(3, context), 0, dpToPx(3, context), 0);
+        horizontalScrollView.setLayoutParams(horizontalScrollViewParams);
+        horizontalScrollView.setVerticalScrollBarEnabled(false);
+        horizontalScrollView.setHorizontalScrollBarEnabled(false);
+    
+        final LinearLayout horizontalNavLayout = new LinearLayout(context);
+        horizontalNavLayout.setOrientation(LinearLayout.HORIZONTAL);
+        horizontalNavLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        horizontalNavLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        horizontalNavLayout.setPadding(dpToPx(5, context), 0, dpToPx(5, context), 0);
+    
+        // 2. 下方动态内容容器（关键修改点）
+        final ScrollView verticalScrollView = new ScrollView(context);
+        final LinearLayout verticalContentLayout = new LinearLayout(context);
+        verticalContentLayout.setId(ID_PAGING2_ROOT);
+        verticalContentLayout.setOrientation(LinearLayout.VERTICAL);
+        verticalContentLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        verticalScrollView.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, 0, 1));
+        verticalScrollView.addView(verticalContentLayout);
+        verticalScrollView.setVerticalScrollBarEnabled(false);
+        verticalScrollView.setHorizontalScrollBarEnabled(false);
+    
+        // 3. 导航按钮初始化（添加动态切换逻辑）
+        final String[] scriptNavItems = {"连点", "三角", "侧合", "后仰", "蛇手", "旋转", "绘制", "卡点", "同步", "占位"};
+        for (int i = 0; i < scriptNavItems.length; i++) {
+            final int index = i;
+            TextView navItem = new TextView(context);
+            navItem.setText(scriptNavItems[i]);
+            navItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            navItem.setPadding(dpToPx(10, context), dpToPx(10, context), dpToPx(10, context), dpToPx(10, context));
+            navItem.setGravity(Gravity.CENTER_VERTICAL);
+            navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FFE6EE")));
+            navItem.setTextColor(Color.parseColor("#5A4F6A"));
+    
+            LinearLayout.LayoutParams navItemParams = new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, dpToPx(40, context));
+            navItemParams.setMargins(dpToPx(2, context), 0, dpToPx(2, context), 0);
+            navItem.setLayoutParams(navItemParams);
+    
+            navItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // —— 1. 保存当前脚本页状态 ——
+                    if (verticalContentLayout.getChildCount() > 0) {
+                        SparseArray<Parcelable> state = new SparseArray<>();
+                        verticalContentLayout.saveHierarchyState(state);
+                        scriptPageStates.put(currentScriptPage, state);
+                    }
+    
+                    // —— 2. 重置所有按钮背景 & 高亮当前按钮 ——
+                    for (int j = 0; j < horizontalNavLayout.getChildCount(); j++) {
+                        TextView btn = (TextView) horizontalNavLayout.getChildAt(j);
+                        btn.setBackground(createNavButtonBackground(context, Color.parseColor("#FFE6EE")));
+                    }
+                    navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FF7FAA")));
+    
+                    // —— 3. 移除旧内容并添加新内容 ——
+                    verticalContentLayout.removeAllViews();
+                    switch (index) {
+                        case 0:
+                            verticalContentLayout.addView(AutoClick0Layout(context));
+                            verticalContentLayout.addView(AutoClick1Layout(context));
+                            verticalContentLayout.addView(AutoClick2Layout(context));
+                            verticalContentLayout.addView(AutoClick3Layout(context));
+                            break;
+                        case 1:
+                            verticalContentLayout.addView(Macro0Layout(context));
+                            break;
+                        case 2:
+                            verticalContentLayout.addView(Macro1Layout(context));
+                            break;
+                        case 3:
+                            verticalContentLayout.addView(Macro2Layout(context));
+                            break;
+                        case 4:
+                            verticalContentLayout.addView(Macro3Layout(context));
+                            break;
+                        case 5:
+                            verticalContentLayout.addView(Macro4Layout(context));
+                            break;
+                        case 6:
+                            verticalContentLayout.addView(DrawLayout(context));
+                            break;
+                        case 7:
+                            verticalContentLayout.addView(AutoCardLayout(context));
+                            break;
+                        case 8:
+                            verticalContentLayout.addView(Sync0Layout(context));
+                            verticalContentLayout.addView(Sync1Layout(context));
+                            break;
+                        case 9:
+                            break;
+                    }
+    
+                    // —— 4. 恢复新子页面的状态 ——
+                    SparseArray<Parcelable> saved = scriptPageStates.get(index);
+                    if (saved != null) {
+                        verticalContentLayout.restoreHierarchyState(saved);
+                    }
+    
+                    // —— 5. 更新当前脚本页索引 ——
+                    currentScriptPage = index;
                 }
-
-                // —— 2. 重置所有按钮背景 & 高亮当前按钮 ——
-                for (int j = 0; j < horizontalNavLayout.getChildCount(); j++) {
-                    TextView btn = (TextView) horizontalNavLayout.getChildAt(j);
-                    btn.setBackground(createNavButtonBackground(context, Color.parseColor("#fff2f9d4")));
-                }
-                navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#ff75ab6d")));
-
-                // —— 3. 移除旧内容并添加新内容 ——
-                verticalContentLayout.removeAllViews();
-                switch (index) {
-                    case 0:
-                        verticalContentLayout.addView(AutoClick0Layout(context));
-                        verticalContentLayout.addView(AutoClick1Layout(context));
-                        verticalContentLayout.addView(AutoClick2Layout(context));
-                        verticalContentLayout.addView(AutoClick3Layout(context));
-                        break;
-                    case 1:
-                        verticalContentLayout.addView(Macro0Layout(context));
-                        break;
-                    case 2:
-                        verticalContentLayout.addView(Macro1Layout(context));
-                        break;
-                    case 3:
-                        verticalContentLayout.addView(Macro2Layout(context));
-                        break;
-                    case 4:
-                        verticalContentLayout.addView(Macro3Layout(context));
-                        break;
-                    case 5:
-                        verticalContentLayout.addView(Macro4Layout(context));
-                        break;
-                    case 6:
-                        verticalContentLayout.addView(DrawLayout(context));
-                        break;
-                    case 7:
-                        verticalContentLayout.addView(AutoCardLayout(context));
-                        break;
-                    case 8:
-                        verticalContentLayout.addView(Sync0Layout(context));
-                        verticalContentLayout.addView(Sync1Layout(context));
-                        break;
-                    case 9:
-                        break;
-                }
-
-                // —— 4. 恢复新子页面的状态 ——
-                SparseArray<Parcelable> saved = scriptPageStates.get(index);
-                if (saved != null) {
-                    verticalContentLayout.restoreHierarchyState(saved);
-                }
-
-                // —— 5. 更新当前脚本页索引 ——
-                currentScriptPage = index;
+            });
+            // 默认选中第一个分页
+            if (index == 0) {
+                navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FF7FAA")));
+                verticalContentLayout.addView(AutoClick0Layout(context));
+                verticalContentLayout.addView(AutoClick1Layout(context));
+                verticalContentLayout.addView(AutoClick2Layout(context));
+                verticalContentLayout.addView(AutoClick3Layout(context));
             }
-        });
-        // 默认选中第一个分页
-        if (index == 0) {
-            navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#ff75ab6d")));
-            verticalContentLayout.addView(AutoClick0Layout(context));
-            verticalContentLayout.addView(AutoClick1Layout(context));
-            verticalContentLayout.addView(AutoClick2Layout(context));
-            verticalContentLayout.addView(AutoClick3Layout(context));
+    
+            horizontalNavLayout.addView(navItem);
         }
-
-        horizontalNavLayout.addView(navItem);
+    
+        horizontalScrollView.addView(horizontalNavLayout);
+        container.addView(horizontalScrollView);
+        container.addView(verticalScrollView);
+        return container;
     }
 
-    horizontalScrollView.addView(horizontalNavLayout);
-    container.addView(horizontalScrollView);
-    container.addView(verticalScrollView);
-    return container;
-}
-
-private View AutoClick0Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-
-    // 从 Sample 类中读取数值
-    Sample sample = new Sample();
+    private View AutoClick0Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
     
-    layout.addView(createTextRow(context, "吐球宏（长按）：持续点击吐球键"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX7_MODE, 
-        Sample.吐球_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.吐球.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.吐球.setVisibility(View.GONE);
-                }
-                Sample.吐球_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.吐球_半径, false, value -> { 
-        Sample.吐球_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.吐球, Sample.吐球_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 位置浮动 :", Sample.吐球_位置浮动, false, value -> { 
-        Sample.吐球_位置浮动 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 点击次数 :", Sample.吐球_点击次数, false, value -> { 
-        Sample.吐球_点击次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 每轮延时 :", Sample.吐球_每轮延时, false, value -> { 
-        Sample.吐球_每轮延时 = value; 
-        Sample.saveConfig(context);
-    }));
-
-    return layout;
-}
-
-private View AutoClick1Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "分身宏（长按）：持续点击分身键"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX8_MODE, 
-        Sample.分身_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.分身.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.分身.setVisibility(View.GONE);
-                }
-                Sample.分身_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.分身_半径, false, value -> { 
-        Sample.分身_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.分身, Sample.分身_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 间隔浮动 :", Sample.分身_间隔浮动, false, value -> { 
-        Sample.分身_间隔浮动 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 位置浮动 :", Sample.分身_位置浮动, false, value -> { 
-        Sample.分身_位置浮动 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 点击间隔 :", Sample.分身_点击间隔, false, value -> { 
-        Sample.分身_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-
-    return layout;
-}
-
-private View AutoClick2Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "四分宏（杠杠）：单击4分，长按16分"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX9_MODE, 
-        Sample.四分_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.四分.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.四分.setVisibility(View.GONE);
-                }
-                Sample.四分_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.四分_半径, false, value -> { 
-        Sample.四分_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.四分, Sample.四分_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 4分, 点击间隔 :", Sample.四分_杠杆_点击间隔, false, value -> { 
-        Sample.四分_杠杆_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 16分, 等待操作 :", Sample.四分_杠杆_十六分_等待操作, false, value -> { 
-        Sample.四分_杠杆_十六分_等待操作 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-b 16分, 点击间隔 :", Sample.四分_杠杆_十六分_点击间隔, false, value -> { 
-        Sample.四分_杠杆_十六分_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View AutoClick3Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "冲球宏（单击）：持续点击分身键"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX10_MODE, 
-        Sample.冲球_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.冲球.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.冲球.setVisibility(View.GONE);
-                }
-                Sample.冲球_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.冲球_半径, false, value -> { 
-        Sample.冲球_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.冲球, Sample.冲球_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 点击次数 :", Sample.冲球_点击次数, false, value -> { 
-        Sample.冲球_点击次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 点击间隔 :", Sample.冲球_点击间隔, false, value -> { 
-        Sample.冲球_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-
-    return layout;
-}
-
-private View Macro0Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "三角宏（单击）：按照预设模拟触摸"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX11_MODE, 
-        Sample.三角_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.三角.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.三角.setVisibility(View.GONE);
-                }
-                Sample.三角_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.三角_半径, false, value -> { 
-        Sample.三角_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.三角, Sample.三角_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 展开角度 :", Sample.三角_展开角度, true, value -> { 
-        Sample.三角_展开角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.三角_滑动距离, false, value -> { 
-        Sample.三角_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.三角_滑动时长, false, value -> { 
-        Sample.三角_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.三角_等待时长, false, value -> { 
-        Sample.三角_等待时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 合球角度 :", Sample.三角_合球角度, true, value -> { 
-        Sample.三角_合球角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.三角_滑动距离2, false, value -> { 
-        Sample.三角_滑动距离2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.三角_滑动时长2, false, value -> { 
-        Sample.三角_滑动时长2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.三角_分身次数, false, value -> { 
-        Sample.三角_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 分身间隔 :", Sample.三角_分身间隔, false, value -> { 
-        Sample.三角_分身间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-
-    return layout;
-}
-
-private View Macro1Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "侧合宏（拖拽）：按照预设模拟触摸"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX12_MODE, 
-        Sample.侧合_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.侧合.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.侧合.setVisibility(View.GONE);
-                }
-                Sample.侧合_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.侧合_半径, false, value -> { 
-        Sample.侧合_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.侧合, Sample.侧合_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.侧合_滑动角度, true, value -> { 
-        Sample.侧合_滑动角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.侧合_滑动距离, false, value -> { 
-        Sample.侧合_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.侧合_滑动时长, false, value -> { 
-        Sample.侧合_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.侧合_等待时长, false, value -> { 
-        Sample.侧合_等待时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 合球角度 :", Sample.侧合_合球角度, true, value -> { 
-        Sample.侧合_合球角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.侧合_滑动距离2, false, value -> { 
-        Sample.侧合_滑动距离2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.侧合_滑动时长2, false, value -> { 
-        Sample.侧合_滑动时长2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.侧合_分身次数, false, value -> { 
-        Sample.侧合_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 分身间隔 :", Sample.侧合_分身间隔, false, value -> { 
-        Sample.侧合_分身间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View Macro2Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "后仰宏（拖拽）：按照预设模拟触摸"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX13_MODE, 
-        Sample.后仰_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.后仰.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.后仰.setVisibility(View.GONE);
-                }
-                Sample.后仰_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.后仰_半径, false, value -> { 
-        Sample.后仰_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.后仰, Sample.后仰_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.后仰_滑动角度, true, value -> { 
-        Sample.后仰_滑动角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.后仰_滑动距离, false, value -> { 
-        Sample.后仰_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.后仰_滑动时长, false, value -> { 
-        Sample.后仰_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.后仰_等待时长, false, value -> { 
-        Sample.后仰_等待时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 滑动角度 :", Sample.后仰_滑动角度2, true, value -> { 
-        Sample.后仰_滑动角度2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.后仰_滑动距离2, false, value -> { 
-        Sample.后仰_滑动距离2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-a 合球角度 :", Sample.后仰_合球角度, true, value -> { 
-        Sample.后仰_合球角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-b 滑动距离 :", Sample.后仰_滑动距离3, false, value -> { 
-        Sample.后仰_滑动距离3 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-c 滑动时长 :", Sample.后仰_滑动时长2, false, value -> { 
-        Sample.后仰_滑动时长2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "F-a 分身次数 :", Sample.后仰_分身次数, false, value -> { 
-        Sample.后仰_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "F-b 分身间隔 :", Sample.后仰_分身间隔, false, value -> { 
-        Sample.后仰_分身间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View Macro3Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "蛇手宏（拖拽）：按照预设模拟触摸"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX14_MODE, 
-        Sample.蛇手_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.蛇手.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.蛇手.setVisibility(View.GONE);
-                }
-                Sample.蛇手_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.蛇手_半径, false, value -> { 
-        Sample.蛇手_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.蛇手, Sample.蛇手_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.蛇手_滑动角度, true, value -> { 
-        Sample.蛇手_滑动角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.蛇手_滑动距离, false, value -> { 
-        Sample.蛇手_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.蛇手_滑动时长, false, value -> { 
-        Sample.蛇手_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.蛇手_等待时长, false, value -> { 
-        Sample.蛇手_等待时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 滑动角度 :", Sample.蛇手_滑动角度2, true, value -> { 
-        Sample.蛇手_滑动角度2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.蛇手_滑动距离2, false, value -> { 
-        Sample.蛇手_滑动距离2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.蛇手_滑动时长2, false, value -> { 
-        Sample.蛇手_滑动时长2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 合球角度 :", Sample.蛇手_合球角度, true, value -> { 
-        Sample.蛇手_合球角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.蛇手_滑动距离3, false, value -> { 
-        Sample.蛇手_滑动距离3 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-c 滑动时长 :", Sample.蛇手_滑动时长3, false, value -> { 
-        Sample.蛇手_滑动时长3 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-a 分身次数 :", Sample.蛇手_分身次数, false, value -> { 
-        Sample.蛇手_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-b 分身间隔 :", Sample.蛇手_分身间隔, false, value -> { 
-        Sample.蛇手_分身间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View Macro4Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-    
-    layout.addView(createTextRow(context, "旋转宏（拖拽）：按照预设模拟触摸"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX15_MODE, 
-        Sample.旋转_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    CircleView.旋转.setVisibility(View.VISIBLE);
-                } else {
-                    CircleView.旋转.setVisibility(View.GONE);
-                }
-                Sample.旋转_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.旋转_半径, false, value -> { 
-        Sample.旋转_半径 = value; 
-        newCircle.updateButtonRadius(CircleView.旋转, Sample.旋转_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.旋转_滑动角度, true, value -> { 
-        Sample.旋转_滑动角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.旋转_滑动距离, false, value -> { 
-        Sample.旋转_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.旋转_滑动时长, false, value -> { 
-        Sample.旋转_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.旋转_等待时长, false, value -> { 
-        Sample.旋转_等待时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 滑动角度 :", Sample.旋转_滑动角度2, true, value -> { 
-        Sample.旋转_滑动角度2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.旋转_滑动距离2, false, value -> { 
-        Sample.旋转_滑动距离2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.旋转_滑动时长2, false, value -> { 
-        Sample.旋转_滑动时长2 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 合球角度 :", Sample.旋转_合球角度, true, value -> { 
-        Sample.旋转_合球角度 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.旋转_滑动距离3, false, value -> { 
-        Sample.旋转_滑动距离3 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-c 滑动时长 :", Sample.旋转_滑动时长3, false, value -> { 
-        Sample.旋转_滑动时长3 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-a 分身次数 :", Sample.旋转_分身次数, false, value -> { 
-        Sample.旋转_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "E-b 分身间隔 :", Sample.旋转_分身间隔, false, value -> { 
-        Sample.旋转_分身间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View DrawLayout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-
-    // 从 Sample 类中读取数值
-    Sample sample = new Sample();
-    
-    layout.addView(createTextRow(context, "绘制（复选）：绘制球体相关信息"));
-    
-    LinearLayout horizontalLayout = new LinearLayout(context);
-    horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
-    horizontalLayout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    horizontalLayout.setPadding(0, dpToPx(4, context), 0, dpToPx(4, context));
-    layout.addView(horizontalLayout);
-    
-    createCheckBox(context, "天线", ID_CHECKBOX16_MODE, false, new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            
-                if (((CheckBox) v).isChecked()) {
-                
-                    画天线 = true;
-                } else {
-                
-                    画天线 = false;
-                    drawView.clearAllShapes();
-                }
-            }
-        }, horizontalLayout, 0, 0, 0, 0);
-    createCheckBox(context, "边框", ID_CHECKBOX17_MODE, false, new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            
-                if (((CheckBox) v).isChecked()) {
-                
-                    画边框 = true;
-                } else {
-                
-                    画边框 = false;
-                    drawView.clearAllShapes();
-                }
-            }
-        }, horizontalLayout, 0, 0, 0, 0);
-    createCheckBox(context, "排名", ID_CHECKBOX18_MODE, false, new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            
-                if (((CheckBox) v).isChecked()) {
-                    
-                    画排名 = true;
-                } else {
-                    
-                    画排名 = false;
-                    drawView.clearAllShapes();
-                }
-            }
-        }, horizontalLayout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 分辨率x :", Sample.绘图_分辨率x, false, value -> { 
-        Sample.绘图_分辨率x = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "A-b 分辨率y :", Sample.绘图_分辨率y, false, value -> { 
-        Sample.绘图_分辨率y = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createDoubleEditWithButtons(context, "B-a 绘图大小 :", Sample.绘图_大小, false, value -> { 
-        Sample.绘图_大小 = value; 
-        Sample.saveConfig(context);
-    }));
-    
-    return layout;
-}
-
-private View AutoCardLayout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-
-    // 从 Sample 类中读取数值
-    Sample sample = new Sample();
-    
-    layout.addView(createTextRow(context, "卡点（单击）：检测目标体积触发分身"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX19_MODE, 
-        Sample.卡点_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    卡点.setVisibility(View.VISIBLE);
-                } else {
-                    卡点.setVisibility(View.GONE);
-                }
-                Sample.卡点_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.卡点_半径, false, value -> { 
-        Sample.卡点_半径 = value; 
-        newCircle.updateButtonRadius(UIView.卡点, Sample.卡点_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 检测延迟 :", Sample.卡点_判断延时, false, value -> { 
-        Sample.卡点_判断延时 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 分身延迟 :", Sample.卡点_触摸延迟, false, value -> { 
-        Sample.卡点_触摸延迟 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.卡点_分身次数, false, value -> { 
-        Sample.卡点_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 点击间隔 :", Sample.卡点_点击间隔, false, value -> { 
-        Sample.卡点_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    return layout;
-}
-
-private View Sync0Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-
-    // 从 Sample 类中读取数值
-    Sample sample = new Sample();
-    
-    layout.addView(createTextRow(context, "同步（单击）：检测目标体积触发分身"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX20_MODE, 
-        Sample.同步_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    同步.setVisibility(View.VISIBLE);
-                } else {
-                    同步.setVisibility(View.GONE);
-                }
-                Sample.同步_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.同步_半径, false, value -> { 
-        Sample.同步_半径 = value; 
-        newCircle.updateButtonRadius(UIView.同步, Sample.同步_半径);
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "B-a 滑动距离 :", Sample.同步_滑动距离, false, value -> { 
-        Sample.同步_滑动距离 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "C-a 滑动时长 :", Sample.同步_滑动时长, false, value -> { 
-        Sample.同步_滑动时长 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.同步_分身次数, false, value -> { 
-        Sample.同步_分身次数 = value; 
-        Sample.saveConfig(context);
-    }));
-    layout.addView(createIntegerEditWithButtons(context, "D-b 点击间隔 :", Sample.同步_点击间隔, false, value -> { 
-        Sample.同步_点击间隔 = value; 
-        Sample.saveConfig(context);
-    }));
-    return layout;
-}
-
-private View Sync1Layout(Context context) {
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setLayoutParams(new LinearLayout.LayoutParams(
-            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
-
-    // 从 Sample 类中读取数值
-    Sample sample = new Sample();
-    
-    layout.addView(createTextRow(context, "同步三角（单击）：检测目标体积触发分身"));
-    
-    createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX20_MODE, 
-        Sample.同步三角_状态,
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox)v;
-                if (cb.isChecked()) {
-                    同步三角.setVisibility(View.VISIBLE);
-                } else {
-                    同步三角.setVisibility(View.GONE);
-                }
-                Sample.同步三角_状态 = cb.isChecked();
-                Sample.saveConfig(context);
-            }
-        }, 
-        layout, 0, 0, 0, 0);
-    
-    // 添加位置保存/恢复逻辑
-    layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.同步三角_半径, false, value -> { 
-        Sample.同步三角_半径 = value; 
-        newCircle.updateButtonRadius(UIView.同步三角, Sample.同步三角_半径);
-        Sample.saveConfig(context);
-    }));
-    return layout;
-}
-
-// 按钮拖拽事件处理（在按钮初始化时设置）
-private void setupButtonDraggable(View button, String buttonName, Context context) {
-    button.setOnTouchListener(new View.OnTouchListener() {
-        private int initialX, initialY;
-        private float initialTouchX, initialTouchY;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    initialX = (int) v.getX();
-                    initialY = (int) v.getY();
-                    initialTouchX = event.getRawX();
-                    initialTouchY = event.getRawY();
-                    return true;
-                    
-                case MotionEvent.ACTION_MOVE:
-                    int x = initialX + (int)(event.getRawX() - initialTouchX);
-                    int y = initialY + (int)(event.getRawY() - initialTouchY);
-                    v.setX(x);
-                    v.setY(y);
-                    return true;
-                    
-                case MotionEvent.ACTION_UP:
-                    // 保存新位置
-                    try {
-                        Field xField = Sample.class.getDeclaredField(buttonName + "_坐标x");
-                        Field yField = Sample.class.getDeclaredField(buttonName + "_坐标y");
-                        
-                        xField.setAccessible(true);
-                        yField.setAccessible(true);
-                        
-                        xField.set(null, (int) v.getX());
-                        yField.set(null, (int) v.getY());
-                        
-                        Sample.saveConfig(context);
-                    } catch (Exception e) {
-                        XposedBridge.log("[位置保存错误] " + e.getMessage());
+        // 从 Sample 类中读取数值
+        Sample sample = new Sample();
+        
+        layout.addView(createTextRow(context, "吐球宏（长按）：持续点击吐球键"));
+        
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX7_MODE, 
+            Sample.吐球_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.吐球.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.吐球.setVisibility(View.GONE);
                     }
-                    return true;
-            }
-            return false;
-        }
-    });
-}
-
+                    Sample.吐球_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.吐球_半径, false, value -> { Sample.吐球_半径 = value; newCircle.updateButtonRadius(CircleView.吐球, Sample.吐球_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 位置浮动 :", Sample.吐球_位置浮动, false, value -> { Sample.吐球_位置浮动 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 点击次数 :", Sample.吐球_点击次数, false, value -> { Sample.吐球_点击次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 每轮延时 :", Sample.吐球_每轮延时, false, value -> { Sample.吐球_每轮延时 = value; }));
+    
+        return layout;
+    }
+    
+    private View AutoClick1Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "分身宏（长按）：持续点击分身键"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX8_MODE, 
+            Sample.分身_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.分身.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.分身.setVisibility(View.GONE);
+                    }
+                    Sample.分身_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.分身_半径, false, value -> { Sample.分身_半径 = value; newCircle.updateButtonRadius(CircleView.分身, Sample.分身_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 间隔浮动 :", Sample.分身_间隔浮动, false, value -> { Sample.分身_间隔浮动 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 位置浮动 :", Sample.分身_位置浮动, false, value -> { Sample.分身_位置浮动 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 点击间隔 :", Sample.分身_点击间隔, false, value -> { Sample.分身_点击间隔 = value; }));
+    
+        return layout;
+    }
+    
+    private View AutoClick2Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "四分宏（杠杠）：单击4分，长按16分"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX9_MODE, 
+            Sample.四分_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.四分.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.四分.setVisibility(View.GONE);
+                    }
+                    Sample.四分_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.四分_半径, false, value -> { Sample.四分_半径 = value; newCircle.updateButtonRadius(CircleView.四分, Sample.四分_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 4分, 点击间隔 :", Sample.四分_杠杆_点击间隔, false, value -> { Sample.四分_杠杆_点击间隔 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 16分, 等待操作 :", Sample.四分_杠杆_十六分_等待操作, false, value -> { Sample.四分_杠杆_十六分_等待操作 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-b 16分, 点击间隔 :", Sample.四分_杠杆_十六分_点击间隔, false, value -> { Sample.四分_杠杆_十六分_点击间隔 = value; }));
+        
+        return layout;
+    }
+    
+    private View AutoClick3Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "冲球宏（单击）：持续点击分身键"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX10_MODE, 
+            Sample.冲球_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.冲球.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.冲球.setVisibility(View.GONE);
+                    }
+                    Sample.冲球_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.冲球_半径, false, value -> { Sample.冲球_半径 = value; newCircle.updateButtonRadius(CircleView.冲球, Sample.冲球_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 点击次数 :", Sample.冲球_点击次数, false, value -> { Sample.冲球_点击次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 点击间隔 :", Sample.冲球_点击间隔, false, value -> { Sample.冲球_点击间隔 = value; }));
+    
+        return layout;
+    }
+    
+    private View Macro0Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "三角宏（单击）：按照预设模拟触摸"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX11_MODE, 
+            Sample.三角_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.三角.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.三角.setVisibility(View.GONE);
+                    }
+                    Sample.三角_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.三角_半径, false, value -> { Sample.三角_半径 = value; newCircle.updateButtonRadius(CircleView.三角, Sample.三角_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 展开角度 :", Sample.三角_展开角度, true, value -> { Sample.三角_展开角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.三角_滑动距离, false, value -> { Sample.三角_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.三角_滑动时长, false, value -> { Sample.三角_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.三角_等待时长, false, value -> { Sample.三角_等待时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 合球角度 :", Sample.三角_合球角度, true, value -> { Sample.三角_合球角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.三角_滑动距离2, false, value -> { Sample.三角_滑动距离2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.三角_滑动时长2, false, value -> { Sample.三角_滑动时长2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.三角_分身次数, false, value -> { Sample.三角_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 分身间隔 :", Sample.三角_分身间隔, false, value -> { Sample.三角_分身间隔 = value; }));
+    
+        return layout;
+    }
+    
+    private View Macro1Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "侧合宏（拖拽）：按照预设模拟触摸"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX12_MODE, 
+            Sample.侧合_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.侧合.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.侧合.setVisibility(View.GONE);
+                    }
+                    Sample.侧合_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.侧合_半径, false, value -> { Sample.侧合_半径 = value; newCircle.updateButtonRadius(CircleView.侧合, Sample.侧合_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.侧合_滑动角度, true, value -> { Sample.侧合_滑动角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.侧合_滑动距离, false, value -> { Sample.侧合_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.侧合_滑动时长, false, value -> { Sample.侧合_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.侧合_等待时长, false, value -> { Sample.侧合_等待时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 合球角度 :", Sample.侧合_合球角度, true, value -> { Sample.侧合_合球角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.侧合_滑动距离2, false, value -> { Sample.侧合_滑动距离2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.侧合_滑动时长2, false, value -> { Sample.侧合_滑动时长2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.侧合_分身次数, false, value -> { Sample.侧合_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 分身间隔 :", Sample.侧合_分身间隔, false, value -> { Sample.侧合_分身间隔 = value; }));
+        
+        return layout;
+    }
+    
+    private View Macro2Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "后仰宏（拖拽）：按照预设模拟触摸"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX13_MODE, 
+            Sample.后仰_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.后仰.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.后仰.setVisibility(View.GONE);
+                    }
+                    Sample.后仰_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.后仰_半径, false, value -> { Sample.后仰_半径 = value; newCircle.updateButtonRadius(CircleView.后仰, Sample.后仰_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.后仰_滑动角度, true, value -> { Sample.后仰_滑动角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.后仰_滑动距离, false, value -> { Sample.后仰_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.后仰_滑动时长, false, value -> { Sample.后仰_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.后仰_等待时长, false, value -> { Sample.后仰_等待时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 滑动角度 :", Sample.后仰_滑动角度2, true, value -> { Sample.后仰_滑动角度2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.后仰_滑动距离2, false, value -> { Sample.后仰_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-a 合球角度 :", Sample.后仰_合球角度, true, value -> { Sample.后仰_合球角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-b 滑动距离 :", Sample.后仰_滑动距离3, false, value -> { Sample.后仰_滑动距离2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-c 滑动时长 :", Sample.后仰_滑动时长2, false, value -> { Sample.后仰_滑动时长2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "F-a 分身次数 :", Sample.后仰_分身次数, false, value -> { Sample.后仰_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "F-b 分身间隔 :", Sample.后仰_分身间隔, false, value -> { Sample.后仰_分身间隔 = value; }));
+        
+        return layout;
+    }
+    
+    private View Macro3Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "蛇手宏（拖拽）：按照预设模拟触摸"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX14_MODE, 
+            Sample.蛇手_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.蛇手.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.蛇手.setVisibility(View.GONE);
+                    }
+                    Sample.蛇手_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.蛇手_半径, false, value -> { Sample.蛇手_半径 = value; newCircle.updateButtonRadius(CircleView.蛇手, Sample.蛇手_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.蛇手_滑动角度, true, value -> { Sample.蛇手_滑动角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.蛇手_滑动距离, false, value -> { Sample.蛇手_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.蛇手_滑动时长, false, value -> { Sample.蛇手_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.蛇手_等待时长, false, value -> { Sample.蛇手_等待时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 滑动角度 :", Sample.蛇手_滑动角度2, true, value -> { Sample.蛇手_滑动角度2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.蛇手_滑动距离2, false, value -> { Sample.蛇手_滑动距离2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.蛇手_滑动时长2, false, value -> { Sample.蛇手_滑动时长2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 合球角度 :", Sample.蛇手_合球角度, true, value -> { Sample.蛇手_合球角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.蛇手_滑动距离3, false, value -> { Sample.蛇手_滑动距离3 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-c 滑动时长 :", Sample.蛇手_滑动时长3, false, value -> { Sample.蛇手_滑动时长3 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-a 分身次数 :", Sample.蛇手_分身次数, false, value -> { Sample.蛇手_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-b 分身间隔 :", Sample.蛇手_分身间隔, false, value -> { Sample.蛇手_分身间隔 = value; }));
+        
+        return layout;
+    }
+    
+    private View Macro4Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+        
+        layout.addView(createTextRow(context, "旋转宏（拖拽）：按照预设模拟触摸"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX15_MODE, 
+            Sample.旋转_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        CircleView.旋转.setVisibility(View.VISIBLE);
+                    } else {
+                        CircleView.旋转.setVisibility(View.GONE);
+                    }
+                    Sample.旋转_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.旋转_半径, false, value -> { Sample.旋转_半径 = value; newCircle.updateButtonRadius(CircleView.旋转, Sample.旋转_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 滑动角度 :", Sample.旋转_滑动角度, true, value -> { Sample.旋转_滑动角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-b 滑动距离 :", Sample.旋转_滑动距离, false, value -> { Sample.旋转_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-c 滑动时长 :", Sample.旋转_滑动时长, false, value -> { Sample.旋转_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "B-d 等待时长 :", Sample.旋转_等待时长, false, value -> { Sample.旋转_等待时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 滑动角度 :", Sample.旋转_滑动角度2, true, value -> { Sample.旋转_滑动角度2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-b 滑动距离 :", Sample.旋转_滑动距离2, false, value -> { Sample.旋转_滑动距离2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-c 滑动时长 :", Sample.旋转_滑动时长2, false, value -> { Sample.旋转_滑动时长2 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 合球角度 :", Sample.旋转_合球角度, true, value -> { Sample.旋转_合球角度 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 滑动距离 :", Sample.旋转_滑动距离3, false, value -> { Sample.旋转_滑动距离3 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-c 滑动时长 :", Sample.旋转_滑动时长3, false, value -> { Sample.旋转_滑动时长3 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-a 分身次数 :", Sample.旋转_分身次数, false, value -> { Sample.旋转_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "E-b 分身间隔 :", Sample.旋转_分身间隔, false, value -> { Sample.旋转_分身间隔 = value; }));
+        
+        return layout;
+    }
+    
+    private View DrawLayout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+    
+        // 从 Sample 类中读取数值
+        Sample sample = new Sample();
+        
+        layout.addView(createTextRow(context, "绘制（复选）：绘制球体相关信息"));
+        
+        LinearLayout horizontalLayout = new LinearLayout(context);
+        horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+        horizontalLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        horizontalLayout.setPadding(0, dpToPx(4, context), 0, dpToPx(4, context));
+        layout.addView(horizontalLayout);
+        
+        createCheckBox(context, "天线", ID_CHECKBOX16_MODE, false, new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                
+                    if (((CheckBox) v).isChecked()) {
+                    
+                        画天线 = true;
+                    } else {
+                    
+                        画天线 = false;
+                        drawView.clearAllShapes();
+                    }
+                }
+            }, horizontalLayout, 0, 0, 0, 0);
+        createCheckBox(context, "边框", ID_CHECKBOX17_MODE, false, new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                
+                    if (((CheckBox) v).isChecked()) {
+                    
+                        画边框 = true;
+                    } else {
+                    
+                        画边框 = false;
+                        drawView.clearAllShapes();
+                    }
+                }
+            }, horizontalLayout, 0, 0, 0, 0);
+        createCheckBox(context, "排名", ID_CHECKBOX18_MODE, false, new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                
+                    if (((CheckBox) v).isChecked()) {
+                        
+                        画排名 = true;
+                    } else {
+                        
+                        画排名 = false;
+                        drawView.clearAllShapes();
+                    }
+                }
+            }, horizontalLayout, 0, 0, 0, 0);
+        
+        layout.addView(createIntegerEditWithButtons(context, "A-a 分辨率x :", Sample.绘图_分辨率x, false, value -> { Sample.绘图_分辨率x = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "A-b 分辨率y :", Sample.绘图_分辨率y, false, value -> { Sample.绘图_分辨率y = value; }));
+        layout.addView(createDoubleEditWithButtons(context, "B-a 绘图大小 :", Sample.绘图_大小, false, value -> { Sample.绘图_大小 = value; }));
+        
+        return layout;
+    }
+    
+    private View AutoCardLayout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+    
+        // 从 Sample 类中读取数值
+        Sample sample = new Sample();
+        
+        layout.addView(createTextRow(context, "卡点（单击）：检测目标体积触发分身"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX19_MODE, 
+            Sample.卡点_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        卡点.setVisibility(View.VISIBLE);
+                    } else {
+                        卡点.setVisibility(View.GONE);
+                    }
+                    Sample.卡点_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.卡点_半径, false, value -> { Sample.卡点_半径 = value; newCircle.updateButtonRadius(UIView.卡点, Sample.卡点_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 检测延迟 :", Sample.卡点_判断延时, false, value -> { Sample.卡点_判断延时 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 分身延迟 :", Sample.卡点_触摸延迟, false, value -> { Sample.卡点_触摸延迟 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.卡点_分身次数, false, value -> { Sample.卡点_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 点击间隔 :", Sample.卡点_点击间隔, false, value -> { Sample.卡点_点击间隔 = value; }));
+        return layout;
+    }
+    
+    private View Sync0Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+    
+        // 从 Sample 类中读取数值
+        Sample sample = new Sample();
+        
+        layout.addView(createTextRow(context, "同步（单击）：检测目标体积触发分身"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX20_MODE, 
+            Sample.同步_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        同步.setVisibility(View.VISIBLE);
+                    } else {
+                        同步.setVisibility(View.GONE);
+                    }
+                    Sample.同步_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.同步_半径, false, value -> { Sample.同步_半径 = value; newCircle.updateButtonRadius(UIView.同步, Sample.同步_半径); }));
+        layout.addView(createIntegerEditWithButtons(context, "B-a 滑动距离 :", Sample.同步_滑动距离, false, value -> { Sample.同步_滑动距离 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "C-a 滑动时长 :", Sample.同步_滑动时长, false, value -> { Sample.同步_滑动时长 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-a 分身次数 :", Sample.同步_分身次数, false, value -> { Sample.同步_分身次数 = value; }));
+        layout.addView(createIntegerEditWithButtons(context, "D-b 点击间隔 :", Sample.同步_点击间隔, false, value -> { Sample.同步_点击间隔 = value; }));
+        return layout;
+    }
+    
+    private View Sync1Layout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        layout.setPadding(dpToPx(8, context), dpToPx(8, context), dpToPx(8, context), dpToPx(8, context));
+    
+        // 从 Sample 类中读取数值
+        Sample sample = new Sample();
+        
+        layout.addView(createTextRow(context, "同步三角（单击）：检测目标体积触发分身"));
+        
+        createCheckBox(context, "按钮状态 - 显示/隐藏", ID_CHECKBOX20_MODE, 
+            Sample.同步三角_状态,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    if (cb.isChecked()) {
+                        同步三角.setVisibility(View.VISIBLE);
+                    } else {
+                        同步三角.setVisibility(View.GONE);
+                    }
+                    Sample.同步三角_状态 = cb.isChecked();
+                    Sample.saveConfig(context);
+                }
+            }, 
+            layout, 0, 0, 0, 0);
+        layout.addView(createIntegerEditWithButtons(context, "A-a 按钮半径 :", Sample.同步三角_半径, false, value -> { Sample.同步三角_半径 = value; newCircle.updateButtonRadius(UIView.同步三角, Sample.同步三角_半径); }));
+        return layout;
+    }
     
     // =============== 排名分页 ===============
     private View createPaging3Layout(Context context) {
@@ -1826,20 +1460,20 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         scrollView.addView(container);
     
         // —— 输入玩家 ID —— //
-      /*  final EditText inputId = new EditText(context);
+        final EditText inputId = new EditText(context);
         inputId.setHint("请输入玩家 ID");
         inputId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         inputId.setLayoutParams(new LinearLayout.LayoutParams(
             LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        inputId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C")));
-        inputId.setTextColor(Color.parseColor("#FFFFFFFF"));
+        inputId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF69B4")));
+        inputId.setTextColor(Color.parseColor("#5A4F6A"));
         container.addView(inputId);
     
         // —— 查询按钮 —— //
         Button btnQuery = new Button(context);
         btnQuery.setText("查询排名");
         btnQuery.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        btnQuery.setTextColor(Color.parseColor("#FFFFFFFF"));
+        btnQuery.setTextColor(Color.parseColor("#5A4F6A"));
         btnQuery.setAllCaps(false);
         btnQuery.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         
@@ -1852,7 +1486,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         // 2. 圆角背景
         GradientDrawable btnBg = new GradientDrawable();
         btnBg.setCornerRadius(dpToPx(5, context));
-        btnBg.setColor(Color.parseColor("#FF80956C"));
+        btnBg.setColor(Color.parseColor("#FF7FAA"));
         btnQuery.setBackground(btnBg);
         container.addView(btnQuery);
     
@@ -1861,7 +1495,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         tvResult.setText("等待查询…");
         tvResult.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tvResult.setLineSpacing(dpToPx(4, context), 1f);
-        tvResult.setTextColor(Color.parseColor("#FF80956C"));
+        tvResult.setTextColor(Color.parseColor("#5A4F6A"));
         tvResult.setGravity(Gravity.START);
         GradientDrawable bg = new GradientDrawable();
         bg.setColor(Color.parseColor("#FFFFFF"));
@@ -1938,15 +1572,15 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
                     });
                 }
             }).start();
-        });*/
+        });
         
-      /*  View divider = new View(context);
+        View divider = new View(context);
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
             LayoutParams.MATCH_PARENT, dpToPx(1, context));
         dividerParams.setMargins(0, dpToPx(16, context), 0, dpToPx(16, context));
         divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.parseColor("#FF80956C"));  // 使用和标题栏相同的粉色
-        container.addView(divider);*/
+        divider.setBackgroundColor(Color.parseColor("#FFB6C1"));  // 使用和标题栏相同的粉色
+        container.addView(divider);
     
         // 设置自身ID输入框
         final EditText inputSelfId = new EditText(context);
@@ -1954,8 +1588,8 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         inputSelfId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         inputSelfId.setLayoutParams(new LinearLayout.LayoutParams(
             LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        inputSelfId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C")));
-        inputSelfId.setTextColor(Color.parseColor("#FFFFFFFF"));
+        inputSelfId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF69B4")));
+        inputSelfId.setTextColor(Color.parseColor("#5A4F6A"));
         
         // 读取已保存的ID
         Integer savedId = 读取(context, "MyRankId.txt", Integer.class);
@@ -1965,9 +1599,9 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
     
         // 设置按钮
         Button btnSetId = new Button(context);
-        btnSetId.setText("保存");
+        btnSetId.setText("设置自身排名ID");
         btnSetId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        btnSetId.setTextColor(Color.parseColor("#FFFFFFFF"));
+        btnSetId.setTextColor(Color.parseColor("#5A4F6A"));
         btnSetId.setAllCaps(false);
         
         // 按钮样式
@@ -1977,7 +1611,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         btnSetId.setLayoutParams(btnParamsSet);
         GradientDrawable btnBgSet = new GradientDrawable();
         btnBgSet.setCornerRadius(dpToPx(5, context));
-        btnBgSet.setColor(Color.parseColor("#ff75ab6d"));//保存按键背景色
+        btnBgSet.setColor(Color.parseColor("#FF7FAA"));
         btnSetId.setBackground(btnBgSet);
         container.addView(btnSetId);
     
@@ -2017,7 +1651,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
             LayoutParams.MATCH_PARENT, dpToPx(1, context));
         dividerParams2.setMargins(0, dpToPx(16, context), 0, dpToPx(16, context));
         divider2.setLayoutParams(dividerParams2);
-        divider2.setBackgroundColor(Color.parseColor("#FF80956C"));
+        divider2.setBackgroundColor(Color.parseColor("#FFB6C1"));
         container.addView(divider2);
         
         // 新增：指定排名ID输入框
@@ -2026,8 +1660,8 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         inputSpecifiedId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         inputSpecifiedId.setLayoutParams(new LinearLayout.LayoutParams(
             LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        inputSpecifiedId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C")));
-        inputSpecifiedId.setTextColor(Color.parseColor("#FFFFFFFF"));
+        inputSpecifiedId.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF69B4")));
+        inputSpecifiedId.setTextColor(Color.parseColor("#5A4F6A"));
         
         // 读取已保存的指定ID
         Integer savedSpecifiedId = 读取(context, "RankId.txt", Integer.class);
@@ -2036,9 +1670,9 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         
         // 新增：设置指定ID按钮
         Button btnSetSpecifiedId = new Button(context);
-        btnSetSpecifiedId.setText("保存");
+        btnSetSpecifiedId.setText("设置指定排名ID");
         btnSetSpecifiedId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        btnSetSpecifiedId.setTextColor(Color.parseColor("#FFFFFFFF"));
+        btnSetSpecifiedId.setTextColor(Color.parseColor("#5A4F6A"));
         btnSetSpecifiedId.setAllCaps(false);
         
         // 按钮样式（与自身ID按钮一致）
@@ -2048,7 +1682,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         btnSetSpecifiedId.setLayoutParams(btnParamsSpecified);
         GradientDrawable btnBgSpecified = new GradientDrawable();
         btnBgSpecified.setCornerRadius(dpToPx(5, context));
-        btnBgSpecified.setColor(Color.parseColor("#ff75ab6d"));//保存按键背景色
+        btnBgSpecified.setColor(Color.parseColor("#FF7FAA"));
         btnSetSpecifiedId.setBackground(btnBgSpecified);
         container.addView(btnSetSpecifiedId);
         
@@ -2126,8 +1760,8 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
             navItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             navItem.setPadding(dpToPx(10, context), dpToPx(10, context), dpToPx(10, context), dpToPx(10, context));
             navItem.setGravity(Gravity.CENTER_VERTICAL);
-            navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#80979ea6")));
-            navItem.setTextColor(Color.parseColor("#FF80956C"));
+            navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FFE6EE")));
+            navItem.setTextColor(Color.parseColor("#5A4F6A"));
     
             LinearLayout.LayoutParams navItemParams = new LinearLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, dpToPx(40, context));
@@ -2147,9 +1781,9 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
                     // —— 2. 重置所有按钮背景 & 高亮当前按钮 ——
                     for (int j = 0; j < horizontalNavLayout.getChildCount(); j++) {
                         TextView btn = (TextView) horizontalNavLayout.getChildAt(j);
-                        btn.setBackground(createNavButtonBackground(context, Color.parseColor("#80979ea6")));
+                        btn.setBackground(createNavButtonBackground(context, Color.parseColor("#FFE6EE")));
                     }
-                    navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#ff75ab6d")));
+                    navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FF7FAA")));
     
                     // —— 3. 移除旧内容并添加新内容 ——
                     verticalContentLayout.removeAllViews();
@@ -2183,7 +1817,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
             });
             // 默认选中第一个分页
             if (index == 0) {
-                navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#ff75ab6d")));
+                navItem.setBackground(createNavButtonBackground(context, Color.parseColor("#FF7FAA")));
                 verticalContentLayout.addView(BeautifyLayout0(context));
             }
     
@@ -2305,9 +1939,9 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         scrollView.addView(childLayout);
         
         TextView Text1 = new TextView(context);
-        Text1.setText("联系开发: BlueBerry");
+        Text1.setText("联系开发: Wind");
         Text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        Text1.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        Text1.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         
         // 创建边距参数并设置
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
@@ -2327,9 +1961,9 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         });
         
         TextView Text2 = new TextView(context);
-        Text2.setText("加入我们");
+        Text2.setText("加入我们: 1042385459");
         Text2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        Text2.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        Text2.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         
         // 创建边距参数并设置
         ViewGroup.MarginLayoutParams params1 = new ViewGroup.MarginLayoutParams(
@@ -2567,7 +2201,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         TextView tv = new TextView(context);
         tv.setText(label);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        tv.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        tv.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         rowLayout.addView(tv);
     
         return rowLayout;
@@ -2592,7 +2226,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         tv.setLayoutParams(textParams);
         tv.setText(label);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        tv.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        tv.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         rowLayout.addView(tv);
     
         // 设置 EditText，用于显示和编辑数值
@@ -2604,7 +2238,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         valueEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         valueEditText.setText(String.valueOf(initialValue));  // 设置初始值
         valueEditText.setPadding(dpToPx(10, context), 0, 0, 0);
-        valueEditText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C"))); // 霓虹粉光标色数值显示👿
+        valueEditText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF69B4"))); // 霓虹粉光标色
         rowLayout.addView(valueEditText);
         
         // 创建减号按钮，减少数值
@@ -2791,7 +2425,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         tv.setLayoutParams(textParams);
         tv.setText(label);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        tv.setTextColor(Color.parseColor("#FF80956C")); // 紫藤灰
+        tv.setTextColor(Color.parseColor("#5A4F6A")); // 紫藤灰
         rowLayout.addView(tv);
     
         // 设置 EditText，用于显示和编辑数值
@@ -2803,7 +2437,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         valueEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         valueEditText.setText(String.format("%.2f", initialValue));
         valueEditText.setPadding(dpToPx(10, context), 0, 0, 0);
-        valueEditText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C"))); // 霓虹粉光标色数值显示
+        valueEditText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF69B4"))); // 霓虹粉光标色
         rowLayout.addView(valueEditText);
         
         // 创建减号按钮，减少数值
@@ -2992,15 +2626,15 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         seekBar.setLayoutParams(seekBarParams);
         seekBar.setMax((int) ((max - min) * precisionScale));  // 放大到 10^6 范围
         seekBar.setProgress((int) ((initialValue - min) * precisionScale)); // 初始化时放大
-        seekBar.getThumb().setColorFilter(Color.parseColor("#FF80956C"), android.graphics.PorterDuff.Mode.SRC_IN);
-        seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#c5979ea6"), android.graphics.PorterDuff.Mode.SRC_IN);
+        seekBar.getThumb().setColorFilter(Color.parseColor("#6F5A9A"), android.graphics.PorterDuff.Mode.SRC_IN);
+        seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#A390E4"), android.graphics.PorterDuff.Mode.SRC_IN);
         layout.addView(seekBar);
     
         // 替换编辑框为文本显示：用 TextView 显示当前值
         TextView valueTextView = new TextView(context);
         valueTextView.setText(String.format("%.3f", initialValue));  // 显示 3 位小数
         valueTextView.setTextSize(17);
-        valueTextView.setTextColor(Color.parseColor("#FF80956C"));
+        valueTextView.setTextColor(Color.parseColor("#B9A6FF"));
         // 如果需要居中，可设置文本重心
         // valueTextView.setGravity(Gravity.CENTER);
         
@@ -3054,8 +2688,8 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
         checkBox.setLayoutParams(checkBoxParams);
         
         checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        checkBox.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF80956C"))); // 设置选中色
-        checkBox.setTextColor(Color.parseColor("#FF80956C")); // 设置文字颜色
+        checkBox.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF7FAA"))); // 设置选中色
+        checkBox.setTextColor(Color.parseColor("#5A4F6A")); // 设置文字颜色
     
         // 设置点击事件的回调
         checkBox.setOnClickListener(onClickListener);
@@ -3075,7 +2709,7 @@ private void setupButtonDraggable(View button, String buttonName, Context contex
     // 创建带圆角的按钮背景
     private GradientDrawable createRoundButtonBackground(Context context) {
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(Color.parseColor("#80979ea6")); 
+        drawable.setColor(Color.parseColor("#FF80BF")); 
         drawable.setCornerRadius(dpToPx(2, context));
         return drawable;
     }
